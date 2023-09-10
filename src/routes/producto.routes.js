@@ -7,8 +7,6 @@ import {
 
 const productosRouter = Router()
 
-
-//Para que funcione el query con limite es necesario agregar despues de la url ?limit=x  ----> siendo x un valor ingresado por el usuario ejemplo: http://localhost:8080/productos/?limit=5
 productosRouter.get('/', async (req, res) => {
     const {
         limit
