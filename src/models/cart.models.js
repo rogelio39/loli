@@ -17,4 +17,4 @@ productos: [
 ]
 })
 
-export const cartsModel = model('carts', cartSchema)
+export const cartModel = model('carts', cartSchema)

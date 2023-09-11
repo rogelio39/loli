@@ -1,3 +1,5 @@
+import { Schema, model} from "mongoose";
+
 const userSchema = new Schema({
     nombre: {
         type: String,

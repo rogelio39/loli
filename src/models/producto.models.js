@@ -1,43 +1,47 @@
-import {
-    Schema,
-    model
-} from "moongose";
+import { Schema, model} from "mongoose";
 
 const productoSchema = new Schema({
-    codigo: {
-        type: String,
-        required: true,
-        unique: true,
+    productos:{
+        type:[
+            {
+            codigo: {
+                type: String,
+                required: true,
+                unique: true,
+            },
+            nombre: {
+                type: String,
+                required: true,
+            },
+            descripcion: {
+                type: String,
+                required: true
+            },
+            cantidad: {
+                type: Number,
+                required: true,
+            },
+            precio: {
+                type: Number,
+                required: true,
+            },
+            stock: {
+                type: Number,
+                required: true,
+            },
+            categoria: {
+                type: String,
+                required: true,
+            },
+            status:{
+                type:Boolean,
+                default :true,
+            },
+            imgs:[], 
+        }
+        ]
     },
-    nombre: {
-        type: String,
-        required: true,
-    },
-    marca: {
-        type: String,
-        required: true,
-    },
-    precio: {
-        type: Number,
-        required: true,
-    },
-    unidades: {
-        type: Number,
-        required: true,
-    },
-    categoria: {
-        type: String,
-        required: true,
-    },
-    cantidad: {
-        type: Number,
-        required: true,
-    },
-    status:{
-        type:Boolean,
-        default :true,
-    },
-    imgs:[], 
+    default: []
 })
 
 

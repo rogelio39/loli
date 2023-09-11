@@ -1,16 +1,10 @@
-import {
-    Router
-} from "express";
-import {
-    productoModel
-} from "../models/producto.models";
+import { Router} from "express";
+import {  productoModel} from "../models/producto.models.js";
 
 const productosRouter = Router()
 
 productosRouter.get('/', async (req, res) => {
-    const {
-        limit
-    } = req.query
+    const { limit  } = req.query
     try {
         const prods = await productoModel.find().limit(limit)
         res.status(200).send({ respuesta: 'OK', mensaje: prods })
@@ -25,13 +19,15 @@ productosRouter.get('/:id', async (req, res) => {
         const prod = await productoModel.findById()
         if(prod)
         res.status(200).send({ respuesta: 'OK', mensaje: prod })
+        else
+        res.status(404).send({ respuesta: 'Error en consultar Producto', mensaje: 'Not Found' })
     } catch (error) {
         res.status(400).send({ respuesta: 'Error', mensaje: "No encontrado" })
     }
 })
 
 productosRouter.post('/', async (req, res) => {
-    const{codigo,nombre, marca, precio, unidades, categoria,status} = req.body
+    const{codigo,nombre, marca, precio, unidades, categoria,status,img} = req.body
     try {
         const prod = await productoModel.create({codigo,nombre, marca, precio, unidades, categoria,status, img})
         res.status(200).send({ respuesta: 'OK', mensaje: prod})
