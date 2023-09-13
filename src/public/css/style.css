@@ -15,3 +15,64 @@
     margin: 5px 10px;
 
 }
+
+.chatForm{
+    display: flex;
+    flex-direction: column;
+}
+.chatFormContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    gap: 10px;
+    border: 2px solid black;
+    border-radius: 5px;
+    width: 17rem;
+    padding: 1rem;
+    margin: 0 auto;
+}
+.chatFormContainer-email{
+width: 100%;
+display: flex;
+justify-content: space-between;
+}
+.chatFormContainer-email input {
+    width: 74%;
+}
+.chatFormContainer-email label, .chatFormContainer-mensaje label {
+font-weight: bold;
+}
+.chatFormContainer-mensaje{
+    width: 100%;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.chatFormContainer-mensaje textarea{
+    width: 75%;
+    max-width: 75%;
+    min-height: 100px;
+}
+
+.chatFormContainer-mensaje textarea:focus, .chatFormContainer-email input:focus{
+    outline: 2px solid rgba(26, 134, 197, 0.932);
+}
+.botonEnviar{
+    width: 40%;
+    height: 2rem;
+    background-color: rgba(26, 134, 197, 0.932);
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    
+}
+.botonEnviar:hover{
+    cursor: pointer;
+    /* background-color: rgba(18, 101, 150, 0.932); */
+    color: rgba(26, 134, 197, 0.932);
+    background-color: black;
+    
+
+}

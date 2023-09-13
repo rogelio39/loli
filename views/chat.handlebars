@@ -1,21 +1,26 @@
-<form id="chatForm">
-  <h1>Ingrese su consulta</h1>
-  <label for="email">Email</label>
-  <input id="email" type="text" placeholder="example@example.com" />
-  <label for="chatBox">Mensaje</label>
+<form id="chatForm" class="chatForm">
+  <h1>Complete los campos para enviar su mensaje</h1>
 
-  <textarea
-    type="text"
-    id="chatBox"
-    placeholder="Escriba su mensaje..."
-  ></textarea>
+  <div class="chatFormContainer">
+    <div class="chatFormContainer-email">
+      <label for="email">Email</label>
+      <input id="email" type="text" placeholder="example@example.com" />
+    </div>
 
-  <button type="submit" id="botonEnviar">Enviar</button>
+    <div class="chatFormContainer-mensaje">
+      <label for="chatBox">Mensaje</label>
+      <textarea
+      type="text"
+      id="chatBox"
+      placeholder="Escriba su mensaje..."
+      ></textarea>
+    </div>
+    <button type="submit" id="botonEnviar" class="botonEnviar">Enviar</button>
+  </div>
 </form>
 
 <div class="containerChat" id="containerChat">
     <h2>Mensajes</h2>
     <div class="containerMensajes" id="containerMensajes">
-
     </div>
 </div>
