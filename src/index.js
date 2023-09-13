@@ -4,24 +4,35 @@ import productosRouter from './routes/producto.routes.js';
 import carritoRouter from './routes/cart.routes.js';
 import messageRouter from './routes/message.routes.js';
 import mongoose from 'mongoose';
-import { engine} from 'express-handlebars';
-import {    Server} from 'socket.io';
-import { messageModel } from './models/message.models.js';
+import {
+    engine
+} from 'express-handlebars';
+import {
+    __dirname
+} from './path.js'
+import path from 'path';
+import {
+    Server
+} from 'socket.io';
+import {
+    messageModel
+} from './models/message.models.js';
 
 
 const app = express()
 const PORT = 8080
 
 mongoose.connect('mongodb+srv://florenciaohanian:Lolita2022@cluster0.ahxnz3j.mongodb.net/?retryWrites=true&w=majority')
-.then(() => console.log('BDD conectada'))
-.catch(() => console.log('Error de conexion'))
+    .then(() => console.log('BDD conectada'))
+    .catch(() => console.log('Error de conexion'))
 
 //middlewares
 app.use(express.json())
 app.use('/api/users', userRouter)
 app.use('/api/productos', productosRouter)
 app.use('/api/cart', carritoRouter)
-app.use('/api/mensajes', messageRouter )
+app.use('/api/mensajes', messageRouter)
+app.use('/static', express.static(path.join(__dirname, '/public')))
 app.engine('handlebars', engine())
 app.set('view engine', 'handlebars')
 
@@ -37,21 +48,22 @@ const mensajes = []
 io.on('connection', (socket) => {
     console.log("Servidor Socket.io conectado")
 
-    socket.on('mensaje', (infoMensaje) => {
-        console.log(infoMensaje)
-        const nuevoMensaje = new messageModel({email:infoMensaje.email, message: infoMensaje.message,})
+    socket.on('mensaje',  (infoMensaje) => {
+    
+        const nuevoMensaje =  new messageModel({
+            email: infoMensaje.email,
+            message: infoMensaje.message
+        })
         nuevoMensaje.save()
-        .then(()=>{
-            socket.emit('nuevoMensaje', infoMensaje)
-        
-        } )
-        .catch(error => console.error(error))
-        socket.emit('mensajes', mensajes)
+
+
+        socket.emit('nuevoMensaje', nuevoMensaje)
+
     })
 })
 
 
-app.get('/static', (req, res) => {
+app.get('/static/chat', (req, res) => {
     res.render('chat', {
         css: "style.css",
         title: "Chat",
@@ -59,4 +71,18 @@ app.get('/static', (req, res) => {
     })
 })
 
+app.get('/static/real', (req, res) => {
+    res.render('realTimeProducts', {
+        css: "style.css",
+        title: "Form",
+        js: "realTimeProducts.js"
+    })
+})
 
+app.get('/static/home', (req, res) => {
+    res.render('home', {
+        css: "style.css",
+        title: "Home",
+                productos: listaProductos,
+    })
+})

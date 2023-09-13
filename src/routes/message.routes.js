@@ -14,9 +14,9 @@ messageRouter.get('/', async (req, res) => {
 
 
 messageRouter.post('/', async (req, res) => {
-    const { email, message, date } = req.body
+    const { email, message } = req.body
     try {
-        const respuesta = await messageModel.create({ email, message, date })
+        const respuesta = await messageModel.create({ email, message})
         res.status(200).send({ respuesta: 'OK', mensaje: respuesta })
     } catch (error) {
         res.status(400).send({ respuesta: 'Error al enviar mensaje', mensaje: error })

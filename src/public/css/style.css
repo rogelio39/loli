@@ -1,0 +1,17 @@
+.containerChat {
+    min-height: 500px;
+    height: auto;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+   
+}
+.containerMensaje{
+    display: flex;
+    gap: 10px;
+    border: 1px solid #ccc;
+}
+.containerItem {
+    margin: 5px 10px;
+
+}
