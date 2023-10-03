@@ -7,6 +7,7 @@ productosRouter.get('/', async (req, res) => {
     const { limit  } = req.query
     try {
         const prods = await productoModel.find().limit(limit)
+        
         res.status(200).send({ respuesta: 'OK', mensaje: prods })
     } catch (error) {
         res.status(400).send({ respuesta: 'Error en consultar productos', mensaje: error })
@@ -16,7 +17,7 @@ productosRouter.get('/', async (req, res) => {
 productosRouter.get('/:id', async (req, res) => {
     const {id} = req.params
     try {
-        const prod = await productoModel.findById()
+        const prod = await productoModel.findById(id)
         if(prod)
         res.status(200).send({ respuesta: 'OK', mensaje: prod })
         else
@@ -27,20 +28,21 @@ productosRouter.get('/:id', async (req, res) => {
 })
 
 productosRouter.post('/', async (req, res) => {
-    const{codigo,nombre, marca, precio, unidades, categoria,status,img} = req.body
+    const{codigo, nombre, descripcion, cantidad, precio, stock, categoria, status, img} = req.body
     try {
-        const prod = await productoModel.create({codigo,nombre, marca, precio, unidades, categoria,status, img})
+        const prod = await productoModel.create({codigo, nombre, descripcion, cantidad, precio, stock, categoria, status, img})
+
         res.status(200).send({ respuesta: 'OK', mensaje: prod})
     } catch (error) {
-        res.status(400).send({ respuesta: 'Error en consultar productos', mensaje: error })
+        res.status(400).send({ respuesta: 'Error al crear el producto', mensaje: error })
     }
 })
 
 productosRouter.put('/:id', async (req, res) => {
         const {id} = req.params
-        const {codigo,nombre, marca, precio, unidades, categoria,status} = req.body
+        const {codigo, nombre, descripcion, cantidad, precio, stock, categoria, status, img} = req.body
         try {
-            const prod = await productoModel.findByIdAndUpdate(id, {codigo,nombre, marca, precio, unidades, categoria,status})
+            const prod = await productoModel.findByIdAndUpdate(id, {codigo, nombre, descripcion, cantidad, precio, stock, categoria, status, img})
             if(prod)
             res.status(200).send({ respuesta: 'OK', mensaje: "Producto actualizado" })
         else

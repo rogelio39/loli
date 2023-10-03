@@ -17,14 +17,71 @@ import {
 import {
     messageModel
 } from './models/message.models.js';
+import {
+    userModel
+} from './models/user.models.js';
+import {
+    productoModel
+} from './models/producto.models.js';
 
 
 const app = express()
 const PORT = 8080
 
 mongoose.connect('mongodb+srv://florenciaohanian:Lolita2022@cluster0.ahxnz3j.mongodb.net/?retryWrites=true&w=majority')
-    .then(() => console.log('BDD conectada'))
-    .catch(() => console.log('Error de conexion'))
+    .then(async () => {
+        console.log('BDD conectada')
+        // await productoModel.create(
+        //     [
+        //     {
+        //         codigo: "123pizza",
+        //         nombre: "Pizza de queso azul",
+        //         descripcion: "Masa de pizza con salsa roja, muzzarella y queso azul",
+        //         cantidad: 1,
+        //         precio: 2500,
+        //         stock: 1,
+        //         categoria: "Pizzas y empanadas",
+        //         status: true,
+        //         img: [], 
+        //     },
+        //     {
+        //         codigo: "124pizza",
+        //         nombre: "Pizza muzzarella",
+        //         descripcion: "Masa de pizza con salsa roja, muzzarella y queso azul",
+        //         cantidad: 1,
+        //         precio: 2000,
+        //         stock: 1,
+        //         categoria: "Pizzas y empanadas",
+        //         status: true,
+        //         img: [],
+        //     },
+        //     {
+        //         codigo: "125pizza",
+        //         nombre: "Pizza cebolla y muzzarella",
+        //         descripcion: "Masa de pizza con salsa roja, muzzarella y queso azul",
+        //         cantidad: 1,
+        //         precio: 2500,
+        //         stock: 1,
+        //         categoria: "Pizzas y empanadas",
+        //         status: true,
+        //         img: [],
+        //     },
+        //     {
+        //         codigo: "126pizza",
+        //         nombre: "Pizza de jamon y muzzarella",
+        //         descripcion: "Masa de pizza con salsa roja, muzzarella y queso azul",
+        //         marca: "Crudo",
+        //         cantidad: 1,
+        //         precio: 2500,
+        //         stock: 1,
+        //         categoria: "Pizzas y empanadas",
+        //         status: true,
+        //         img: [],
+        //     }
+        // ])
+
+    })
+    .catch((e) => console.log('Error de conexion', e))
 
 //middlewares
 app.use(express.json())
@@ -48,17 +105,13 @@ const mensajes = []
 io.on('connection', (socket) => {
     console.log("Servidor Socket.io conectado")
 
-    socket.on('mensaje',  (infoMensaje) => {
-    
-        const nuevoMensaje =  new messageModel({
+    socket.on('mensaje', async (infoMensaje) => {
+        await messageModel.create({
             email: infoMensaje.email,
             message: infoMensaje.message
         })
-        nuevoMensaje.save()
-
-
-        socket.emit('nuevoMensaje', nuevoMensaje)
-
+        const mensajes = await messageModel.find()
+        socket.emit('messages', mensajes)
     })
 })
 
@@ -71,18 +124,16 @@ app.get('/static/chat', (req, res) => {
     })
 })
 
-app.get('/static/real', (req, res) => {
-    res.render('realTimeProducts', {
-        css: "style.css",
-        title: "Form",
-        js: "realTimeProducts.js"
-    })
-})
-
 app.get('/static/home', (req, res) => {
     res.render('home', {
         css: "style.css",
         title: "Home",
-                productos: listaProductos,
+        people: [{
+            "name": "Facu"
+        }, {
+            "name": "Loli"
+        }, {
+            "name": "Sofi"
+        }]
     })
 })

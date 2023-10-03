@@ -2,6 +2,7 @@ const socket = io()
 
 const containerMensajes = document.getElementById("containerMensajes")
 const chatForm = document.getElementById("chatForm")
+const containerMensajesViejos = document.getElementById("containerMensajesViejos")
 
 chatForm.addEventListener('submit', async (e) => {
     e.preventDefault()
@@ -22,15 +23,18 @@ chatForm.addEventListener('submit', async (e) => {
     }
 })
 
-socket.on('nuevoMensaje', (infoMensaje) => {
-    containerMensajes.innerHTML +=
+socket.on('messages', (mensajes) => {
+    containerMensajes.innerHTML = ""
+    mensajes.forEach(Mensaje => {
+        containerMensajes.innerHTML +=
+            `
+        <div  class="containerItem">
+            <h3><b>Usuario: </b>${Mensaje.email}</h3>
+            <p><b>Mensaje: </b> ${Mensaje.message}</p>
+            <p>${Mensaje.date}</p>
+            <hr>
+        </div>
         `
-    <div  class="containerItem">
-        <h3><b>Usuario: </b>${infoMensaje.email}</h3>
-        <p><b>Mensaje: </b> ${infoMensaje.message}</p>
-        <p>${infoMensaje.date}</p>
-        <hr>
-    </div>
-    `
-    // arrayMensajes.array.forEach(nuevoMensaje => {});
+        
+    });
 })
