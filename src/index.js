@@ -4,25 +4,13 @@ import productosRouter from './routes/producto.routes.js';
 import carritoRouter from './routes/cart.routes.js';
 import messageRouter from './routes/message.routes.js';
 import mongoose from 'mongoose';
-import {
-    engine
-} from 'express-handlebars';
-import {
-    __dirname
-} from './path.js'
+import {    engine} from 'express-handlebars';
+import {    __dirname} from './path.js'
 import path from 'path';
-import {
-    Server
-} from 'socket.io';
-import {
-    messageModel
-} from './models/message.models.js';
-import {
-    userModel
-} from './models/user.models.js';
-import {
-    productoModel
-} from './models/producto.models.js';
+import {    Server} from 'socket.io';
+import {    messageModel} from './models/message.models.js';
+import {    userModel} from './models/user.models.js';
+import {    productoModel} from './models/producto.models.js';
 
 
 const app = express()
@@ -79,7 +67,8 @@ mongoose.connect('mongodb+srv://florenciaohanian:Lolita2022@cluster0.ahxnz3j.mon
         //         img: [],
         //     }
         // ])
-
+const resultado = await userModel.paginate()
+console.log(resultado)
     })
     .catch((e) => console.log('Error de conexion', e))
 

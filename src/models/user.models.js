@@ -26,6 +26,6 @@ const userSchema = new Schema({
     } 
 })
 
-userSchema.plugin(paginate)
+userSchema.plugin(paginate) 
 
 export const userModel = model('user', userSchema)

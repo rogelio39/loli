@@ -59,13 +59,10 @@ carritoRouter.get('/:id', async (req, res) => {
     try {
         const cart = await cartModel.findById(id)
         if (cart)
-
             res.status(200).send({
                 respuesta: 'OK',
                 mensaje: cart
             })
-
-
         else
             res.status(404).send({
                 respuesta: 'Error en consultar carrito',
@@ -78,8 +75,6 @@ carritoRouter.get('/:id', async (req, res) => {
         })
     }
 })
-
-
 
 carritoRouter.post('/:cid/productos/:pid', async (req, res) => {
     const {
@@ -128,8 +123,6 @@ carritoRouter.post('/:cid/productos/:pid', async (req, res) => {
         })
     }
 })
-
-
 
 carritoRouter.delete('/:cid', async (req, res) => {
     const { cid } = req.params
