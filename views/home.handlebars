@@ -1,10 +1,36 @@
-<div>
-<h1>HOME PAGE</h1>
-<div>
-    <h3>Productos</h3>
+<div class="contenedorPadre">
+  <div class="contenedorTitulo">
+    <h1>Bienvenidos a C R U D O</h1>
+  </div>
 
-    {{#each people}}
-    <p> User name: <strong> {{name}} </strong></p>
-    {{/each}}
+  <div class="contenedorSubTitulo">
+    <h2>Nuestros Productos</h2>
+  </div>
+
+  <div id="contenedorProductos" class="contenedorProductos">
+
+  </div>
 </div>
-</div>
+
+{{!-- {{#if productos}}
+  <h1>Productos</h1>
+  <div id="contenedorProductos" class="containerProd">
+
+    {{#each productos}}
+      <div id={{this.id}} class="containerItem">
+        <h2>{{this.nombre}}</h2>
+        <p><b>Codigo:</b> <b>{{this.codigo}}</b></p>
+        <p><b>Nombre:</b> {{this.nombre}}</p>
+        <p><b>Descripcion: $</b>{{this.descripcion}}</p>
+        <p><b>Cantidad:</b> {{this.cantidad}}</p>
+        <p><b>Precio:</b> {{this.precio}}</p>
+        <p><b>Stock:</b> {{this.stock}}</p>
+        <p><b>Categoria:</b> {{this.categoria}}</p>
+        <button id={{this.id}} class="eliminar"> Eliminar </button>
+      </div>
+    {{/each}} 
+
+  </div>
+{{else}}
+  <h2>No se ha encontrado ningun producto</h2>
+{{/if}} --}}

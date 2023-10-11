@@ -68,7 +68,7 @@ mongoose.connect('mongodb+srv://florenciaohanian:Lolita2022@cluster0.ahxnz3j.mon
         //     }
         // ])
 const resultado = await userModel.paginate()
-console.log(resultado)
+// console.log(resultado)
     })
     .catch((e) => console.log('Error de conexion', e))
 
@@ -94,6 +94,7 @@ const mensajes = []
 io.on('connection', (socket) => {
     console.log("Servidor Socket.io conectado")
 
+    // chat view
     socket.on('mensaje', async (infoMensaje) => {
         await messageModel.create({
             email: infoMensaje.email,
@@ -102,6 +103,11 @@ io.on('connection', (socket) => {
         const mensajes = await messageModel.find()
         socket.emit('messages', mensajes)
     })
+    // Mostrar todos los productos en home.js (y en home handlebars)
+    socket.on('cargarProductos', async () =>{
+        const productos = await productoModel.find();
+        socket.emit('mostrarProductos', productos);
+    })
 })
 
 
@@ -109,20 +115,14 @@ app.get('/static/chat', (req, res) => {
     res.render('chat', {
         css: "style.css",
         title: "Chat",
-        js: "script.js"
+        js: "script.js",
     })
 })
 
-app.get('/static/home', (req, res) => {
+app.get('/static/home', async (req, res) => {
     res.render('home', {
-        css: "style.css",
+        css: "home.css",
         title: "Home",
-        people: [{
-            "name": "Facu"
-        }, {
-            "name": "Loli"
-        }, {
-            "name": "Sofi"
-        }]
+        js: "home.js"
     })
 })

@@ -1,0 +1,29 @@
+.contenedorPadre{
+    display: flex;
+    flex-direction: column;
+}
+.contenedorTitulo{
+    display: flex;
+    justify-content: center;
+}
+.contenedorSubTitulo{
+    margin-left: 2rem;
+}
+
+.contenedorProductos{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+.containerItem{
+    border: 2px solid black;
+    width: fit-content;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 2rem;
+    flex: 1 350px;
+}
+.containerItem h2 {
+    margin: 0;
+}
