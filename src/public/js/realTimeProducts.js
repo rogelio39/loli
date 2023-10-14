@@ -13,37 +13,38 @@ form.addEventListener('submit', async (e) => {
     e.target.reset()
 })
 
-socket.emit('cargarProductos')
+// socket.emit('cargarProductos')
 
 // En el codigo de abajo muestro todo los productos que tengo en la BDD
-socket.on('mostrarProductos', (productos) => {
-    productos.forEach(producto => {
-        containerProductos.innerHTML += `
-        <div id=${producto.id} class="containerItem">
-            <h2>${producto.nombre}</h2>
-            <p><b>Codigo:</b> ${producto.codigo}</p>
-            <p><b>Marca:</b> ${producto.marca}</p>
-            <p><b>Precio: $</b>${producto.precio}</p>
-            <p><b>Unidades:</b> ${producto.unidades}</p>
-            <p><b>Cantidad:</b> ${producto.cantidad}</p>
-            <p><b>Categoria:</b> ${producto.categoria}</p>
-            <button id=${producto.id} class='eliminar'> Eliminar </button>
-        </div>
-        `
+// socket.on('mostrarProductos', (productos) => {
+//     productos.forEach(producto => {
+//         containerProductos.innerHTML += `
+//         <div id=${producto.id} class="containerItem">
+//             <h2>${producto.nombre}</h2>
+//             <p><b>Codigo:</b> ${producto.codigo}</p>
+//             <p><b>Marca:</b> ${producto.marca}</p>
+//             <p><b>Precio: $</b>${producto.precio}</p>
+//             <p><b>Unidades:</b> ${producto.unidades}</p>
+//             <p><b>Cantidad:</b> ${producto.cantidad}</p>
+//             <p><b>Categoria:</b> ${producto.categoria}</p>
+//             <button id=${producto.id} class='eliminar'> Eliminar </button>
+//         </div>
+//         `
         
-    });
-})
+//     });
+// })
 
 // En el codigo de abajo muestro el nuevo producto en pantalla
-socket.on('mostrarNuevoProducto', (producto) => {
+socket.on('productoCreado', (producto) => {
+    console.log(producto)
     containerProductos.innerHTML += `
     <div id=${producto.id} class="containerItem">
         <h2>${producto.nombre}</h2>
         <p><b>Codigo:</b> ${producto.codigo}</p>
-        <p><b>Marca:</b> ${producto.marca}</p>
-        <p><b>Precio: $</b>${producto.precio}</p>
-        <p><b>Unidades:</b> ${producto.unidades}</p>
+        <p><b>Marca:</b> ${producto.descripcion}</p>
         <p><b>Cantidad:</b> ${producto.cantidad}</p>
+        <p><b>Precio: $</b>${producto.precio}</p>
+        <p><b>Unidades:</b> ${producto.stock}</p>
         <p><b>Categoria:</b> ${producto.categoria}</p>
         <button id=${producto.id} class='eliminar'> Eliminar </button>
     </div>

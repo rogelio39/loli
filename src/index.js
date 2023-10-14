@@ -108,6 +108,20 @@ io.on('connection', (socket) => {
         const productos = await productoModel.find();
         socket.emit('mostrarProductos', productos);
     })
+
+    socket.on('nuevoProducto',  async(prod) =>{
+        console.log(prod)
+        await productoModel.create({
+            codigo: prod.codigo,
+            nombre: prod.nombre,
+            descripcion: prod.descripcion,
+            cantidad: prod.cantidad,
+            precio: prod.precio,
+            stock: prod.stock,
+            categoria: prod.categoria
+        })
+        socket.emit('productoCreado', prod)
+    })
 })
 
 
@@ -124,5 +138,13 @@ app.get('/static/home', async (req, res) => {
         css: "home.css",
         title: "Home",
         js: "home.js"
+    })
+})
+
+app.get('/static/crearProd', (req, res) => {
+    res.render('realTimeProducts', {
+        css: "real.css",
+        title: "Form",
+        js: "realTimeProducts.js"
     })
 })
