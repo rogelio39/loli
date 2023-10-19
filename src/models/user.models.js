@@ -23,9 +23,13 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true,
-    } 
-})
+    }, 
+    rol: {
+        type: String,
+        default: 'user'
+    }
+}) 
 
 userSchema.plugin(paginate) 
 
-export const userModel = model('user', userSchema)
+export const userModel = model('users', userSchema)

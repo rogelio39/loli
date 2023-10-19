@@ -14,11 +14,18 @@ socket.on('mostrarProductos', (productos) => {
             <p><b>Precio: $</b>${producto.precio}</p>
             <p><b>Stock:</b> ${producto.stock}</p>
             <p><b>Categoria:</b> ${producto.categoria}</p>
-            <button id=${producto.id} class='eliminar'> Eliminar </button>
+            <button id=${producto._id} class='agregar'> Agregar al carrito </button>
         </div>
         `
         
     });
 })
 
+const agregarAlCarrito = (e) => {
+    socket.emit('agregar', e.target.id);
+
+};
+
+document.addEventListener("click",(e) => e.target.matches(".agregar") && agregarAlCarrito(e)
+);
 socket.emit('cargarProductos');
