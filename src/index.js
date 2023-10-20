@@ -215,11 +215,10 @@ io.on("connection", (socket) => {
     const indice = cart.productos.findIndex((prod) => prod.id_prod._id == productoId);
     if (indice != -1) {
       // console.log('cantidad del producto en el carrito: ', cart.productos[indice].cantidad)
-      if (cart.productos[indice].cantidad != 0){
+      if (cart.productos[indice].cantidad > 1){
         cart.productos[indice].cantidad = cart.productos[indice].cantidad - 1;
       } else {
-        // const productoEliminado = await cartModel.findByIdAndDelete(productoId)
-        console.log('producto con indice en 0')
+        console.log('producto con cantidad 0')
         cart.productos.splice(indice, 1)
       }
     } else {
@@ -227,11 +226,6 @@ io.on("connection", (socket) => {
     }
     const respuesta = await cartModel.findByIdAndUpdate(carts[0]._id, cart);
     socket.emit("carritoActualizado", cart);
-
-
-
-
-
   })
 });
 
