@@ -139,11 +139,11 @@ carritoRouter.delete('/:cid/productos/:pid', async (req, res) => {
     try {
         const cart = await cartModel.findById(cid)
         if (cart) {
-            const prod = await productModel.findById(pid)
+            const prod = await productoModel.findById(pid)
             if (prod) {
-                const indice = cart.products.findIndex(item => item.id_prod._id.toString() == pid)
+                const indice = cart.productos.findIndex(item => item.id_prod._id.toString() == pid)
                 if (indice !== -1) {
-                    cart.products.splice(indice, 1)
+                    cart.productos.splice(indice, 1)
                 }
             }
         }
