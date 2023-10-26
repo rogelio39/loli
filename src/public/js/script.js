@@ -1,5 +1,4 @@
 const socket = io()
-
 const containerMensajes = document.getElementById("containerMensajes")
 const chatForm = document.getElementById("chatForm")
 const containerMensajesViejos = document.getElementById("containerMensajesViejos")

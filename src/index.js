@@ -90,8 +90,8 @@ app.use(
       ttl: 60,
     }),
     secret: process.env.SESSION_SECRET,
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
   })
 );
 
@@ -138,11 +138,13 @@ io.on("connection", (socket) => {
     const mensajes = await messageModel.find();
     socket.emit("messages", mensajes);
   });
+
   // Mostrar todos los productos en home.js (y en home handlebars)
   socket.on("cargarProductos", async () => {
     const productos = await productoModel.find();
     socket.emit("mostrarProductos", productos);
   });
+
   //Se utiliza en realTime
   socket.on("nuevoProducto", async (prod) => {
     await productoModel.create({
@@ -156,8 +158,8 @@ io.on("connection", (socket) => {
     });
     socket.emit("productoCreado", prod);
   });
-  //Se utiliza en realTime
 
+  //Se utiliza en realTime
   socket.on("eliminarProducto", async (id) => {
     try {
       await productoModel.deleteOne({ _id: id });
@@ -168,31 +170,20 @@ io.on("connection", (socket) => {
     }
   });
   //Se utiliza en home
-  socket.on("mostrarProductosCarrito", async() => {
-    // const mensaje = "falta escribir el codigo que traiga al carrito con los productos y los mande al home asi son mostrados";
-      const carts = await cartModel.find();
-      const cart = await cartModel.findById(carts[0]._id);
-      socket.emit("productosEnCarrito", cart.productos);
-
-
+  socket.on("mostrarProductosCarrito", async () => {
+    const carts = await cartModel.find();
+    const cart = await cartModel.findById(carts[0]._id);
+    socket.emit("productosEnCarrito", cart.productos);
   });
 
   socket.on("agregarAlCarrito", async (id) => {
     try {
-      // console.log('id recibido: ', id)
       const producto = await productoModel.findById(id);
-      // console.log("Producto ID: ", producto._id)
-      // console.log("Producto cantidad: ", producto.cantidad)
       const carts = await cartModel.find();
-      // console.log('ID del carrito: ', carts[0]._id)
       const cart = await cartModel.findById(carts[0]._id);
-      // console.log('CARRITO: ', cart)
-      // console.log('Productos del Carrito: ', cart.productos)
-      // console.log('ID DEL PRODUCTO CON INDICE 0: ', cart.productos[0].id_prod._id)
       const indice = cart.productos.findIndex((prod) => prod.id_prod._id == id);
-      console.log('Indice del producto a agregar: ', indice)
+      console.log("Indice del producto a agregar: ", indice);
       if (indice != -1) {
-        // console.log('cantidad del producto en el carrito: ', cart.productos[indice].cantidad)
         cart.productos[indice].cantidad = cart.productos[indice].cantidad + 1;
       } else {
         // console.log('agregando producto al carrito')
@@ -202,31 +193,45 @@ io.on("connection", (socket) => {
         });
       }
       const respuesta = await cartModel.findByIdAndUpdate(carts[0]._id, cart);
-      // console.log("respuesta de la actualizacion", respuesta);
-      console.log('cart: ', cart)
+      console.log("cart: ", cart);
       socket.emit("carritoActualizado", cart);
     } catch (error) {
       console.log(error);
     }
   });
-  socket.on('eliminarDelCarrito', async(productoId)=> {
+  socket.on("eliminarDelCarrito", async (productoId) => {
     const carts = await cartModel.find();
     const cart = await cartModel.findById(carts[0]._id);
-    const indice = cart.productos.findIndex((prod) => prod.id_prod._id == productoId);
+    const indice = cart.productos.findIndex(
+      (prod) => prod.id_prod._id == productoId
+    );
     if (indice != -1) {
       // console.log('cantidad del producto en el carrito: ', cart.productos[indice].cantidad)
-      if (cart.productos[indice].cantidad > 1){
+      if (cart.productos[indice].cantidad > 1) {
         cart.productos[indice].cantidad = cart.productos[indice].cantidad - 1;
       } else {
-        console.log('producto con cantidad 0')
-        cart.productos.splice(indice, 1)
+        console.log("producto con cantidad 0");
+        cart.productos.splice(indice, 1);
       }
     } else {
-      console.log('el producto fue eliminado por completo')
+      console.log("el producto fue eliminado por completo");
     }
     const respuesta = await cartModel.findByIdAndUpdate(carts[0]._id, cart);
     socket.emit("carritoActualizado", cart);
-  })
+  });
+
+  //Se utiliza en logIn
+  // socket.on("credenciales", async (datos) => {
+  //   const user = await userModel.findOne({ email: datos.email });
+  //   // console.log(user);
+  //   if (user) {
+  //     user.password === datos.password
+  //       ? socket.emit('usuarioValido')
+  //       : socket.emit('contraseñaInvalida');
+  //   } else {
+  //     socket.emit('usuarioInexistente');
+  //   }
+  // });
 });
 
 app.get("/static/chat", (req, res) => {
@@ -253,8 +258,22 @@ app.get("/static/crearProd", (req, res) => {
   });
 });
 
-app.get("/login", (req, res) => {
-  const { email, password } = req.body;
-  req.session.email = emailreq.session.password = password;
-  res.setDefaultAutoSelectFamily("Usuario logueado");
+app.get("/static/login", (req, res) => {
+  // const { email, password } = req.body;
+  // req.session.email = email;
+  // req.session.password = password;
+  // res.send("Usuario logueado");
+  res.render("session", {
+    css: "session.css",
+    title: "Session",
+    js: "logIn.js"
+  });
+});
+
+app.get("/static/logOut", (req, res) => {
+  res.render("logOut", {
+    css: "session.css",
+    title: "LogOut",
+    js: "logOut.js",
+  });
 });
