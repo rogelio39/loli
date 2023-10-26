@@ -6,7 +6,9 @@ sessionRouter.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
     if (req.session.login) {
-      res.status(200).send({ resultado: "Usuario ya existente" });
+      // res.status(200).send({ resultado: "Usuario ya logueado" });
+      res.redirect('/static/home', 200, { 'info': 'usuario ya logueado' })
+      return console.log('usuario logueado')
     }
     const user = await userModel.findOne({ email: email });
     if (user) {

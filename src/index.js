@@ -247,6 +247,8 @@ app.get("/static/home", async (req, res) => {
     css: "home.css",
     title: "Home",
     js: "home.js",
+    login: req.session.login,
+
   });
 });
 
@@ -259,10 +261,6 @@ app.get("/static/crearProd", (req, res) => {
 });
 
 app.get("/static/login", (req, res) => {
-  // const { email, password } = req.body;
-  // req.session.email = email;
-  // req.session.password = password;
-  // res.send("Usuario logueado");
   res.render("session", {
     css: "session.css",
     title: "Session",
