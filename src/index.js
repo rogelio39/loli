@@ -7,6 +7,8 @@ import session from "express-session";
 import mongoose from "mongoose";
 import MongoStore from "connect-mongo";
 import cookieParser from "cookie-parser";
+import passport from "passport";
+import inicializacionPassport from "./config/passport.js";
 import { engine } from "express-handlebars";
 import { __dirname } from "./path.js";
 import path from "path";
@@ -94,6 +96,10 @@ app.use(
     saveUninitialized: false,
   })
 );
+
+inicializacionPassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 //Routes
 app.use("/api/users", userRouter);

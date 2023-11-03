@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { userModel } from "../models/user.models.js";
 
+
 const userRouter = Router()
 
 userRouter.get('/', async (req, res) => {
@@ -26,15 +27,6 @@ userRouter.get('/:id', async (req, res) => {
     }
 })
 
-userRouter.post('/', async (req, res) => {
-    const { nombre, apellido, edad, email, password} = req.body
-    try {
-        const respuesta = await userModel.create({ nombre, apellido, edad, email, password})
-        res.status(200).send({ respuesta: 'OK', mensaje: respuesta })
-    } catch (error) {
-        res.status(400).send({ respuesta: 'Error en crear usuario', mensaje: error })
-    }
-})
 
 userRouter.put('/:id', async (req, res) => {
     const { id } = req.params
