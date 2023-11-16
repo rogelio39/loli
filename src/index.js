@@ -1,8 +1,4 @@
 import express from "express";
-import userRouter from "./routes/user.routes.js";
-import productosRouter from "./routes/producto.routes.js";
-import carritoRouter from "./routes/cart.routes.js";
-import messageRouter from "./routes/message.routes.js";
 import session from "express-session";
 import mongoose from "mongoose";
 import MongoStore from "connect-mongo";
@@ -16,9 +12,9 @@ import { Server } from "socket.io";
 import { messageModel } from "./models/message.models.js";
 import { userModel } from "./models/user.models.js";
 import { productoModel } from "./models/producto.models.js";
-import sessionRouter from "./routes/session.routes.js";
+import router from "./routes/index.routes.js";
 import "dotenv/config";
-import { cartModel } from "./models/cart.models.js";
+
 const app = express();
 const PORT = 8080;
 
@@ -97,19 +93,15 @@ app.use(
   })
 );
 
+//Router
+app.use('/', router)
+app.engine("handlebars", engine())
+app.set("view engine", "handlebars")
+app.use("/static", express.static(path.join(__dirname, "/public")));
+
 inicializacionPassport()
 app.use(passport.initialize())
 app.use(passport.session())
-
-//Routes
-app.use("/api/users", userRouter);
-app.use("/api/productos", productosRouter);
-app.use("/api/cart", carritoRouter);
-app.use("/api/mensajes", messageRouter);
-app.use("/api/sessions", sessionRouter);
-app.use("/static", express.static(path.join(__dirname, "/public")));
-app.engine("handlebars", engine());
-app.set("view engine", "handlebars");
 
 app.get("/setcookie", (req, res) => {
   res
