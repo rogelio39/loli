@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { userModel } from "../models/user.models.js";
 import passport from "passport";
+import {generarToken} from "../util/jwt.js"
 import {passportError, autorizacion} from "../util/messagesError.js"
 
 const sessionRouter = Router()
@@ -17,8 +18,12 @@ try{
     edad: req.user.edad,
     email: req.user.email,
   }
+  const token = generarToken(req.user)
+  res.cookie('jwtCookie', token, {
+    maxAge: 72000000 // 20hs
+  })
   res.status(200).send({payload: req.user})
-} catch(error){
+  } catch(error){
 res.status(500).send({mensaje: `Error al iniciar sesion ${error}`})
 }
 })
@@ -84,4 +89,5 @@ sessionRouter.get('/testJWT', passport.authenticate('jwt', {session:false}), (re
 sessionRouter.get('/current', passportError('jwt'), autorizacion('user'), (req, next) =>{
   res.send(req.user)
 })
-export default sessionRouter;
+
+export default sessionRouter
