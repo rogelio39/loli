@@ -5,6 +5,7 @@ import jwt from "passport-jwt"
 import { createHash, validatePassword } from "../util/bcrypt.js";
 import { userModel } from "../models/user.models.js";
 
+//Estrategias
 const LocalStrategy = local.Strategy
 const JWTStrategy = jwt.Strategy
 const ExtractJWT = jwt.ExtractJwt //Extrae las cookies
@@ -12,17 +13,15 @@ const ExtractJWT = jwt.ExtractJwt //Extrae las cookies
 //Registrar usuario
 const inicializacionPassport = () => {
   const cookieExtractor = (req) => {
-    console.log(req.cookies);
     const token = req.cookies.jwtCookie ? req.cookies.jwtCookie : {}
-    console.log('cookieExtractor', token)
+        console.log('cookieExtractor', token)
     return token
   }
 
   passport.use('jwt', new JWTStrategy({
         jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
-        secretOrKey: process.env.JWT_SECRET,
-      },
-      async (jwt_payload, done) => {
+        secretOrKey: process.env.JWT_SECRET
+      }, async (jwt_payload, done) => {
         try {
           console.log('JWT', jwt_payload)
           return done(null, jwt_payload)
