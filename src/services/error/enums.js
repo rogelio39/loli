@@ -1,0 +1,7 @@
+const EErrors ={
+    ROUTING_ERROR:1,//ERROR DE RUTEO
+    INVALID_TYPES_ERROR:2,//ERROR DATO INVALIDO
+    DATABASE_ERROR:3//ERRROR EN DB
+}
+
+export default EErrors

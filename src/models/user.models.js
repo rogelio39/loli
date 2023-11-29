@@ -29,7 +29,7 @@ const userSchema = new Schema({
         type: String,
         default: 'user'
     },
-cart : {
+    cart : {
     type: Schema.Types.ObjectId,
     ref: 'carts'
 }

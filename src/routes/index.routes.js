@@ -8,7 +8,7 @@ import userRouter from "./user.routes.js";
 
 const router = Router()
 
-router.use(("/api/users", userRouter))
+router.use("/api/users", userRouter)
 router.use("/api/productos", productoRouter);
 router.use("/api/cart", carritoRouter);
 router.use("/api/mensajes", messageRouter);

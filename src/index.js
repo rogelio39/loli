@@ -14,6 +14,7 @@ import { userModel } from "./models/user.models.js";
 import { productoModel } from "./models/producto.models.js";
 import router from "./routes/index.routes.js";
 import "dotenv/config";
+import nodemailer from "nodemailer";
 
 const app = express();
 const PORT = 8080;
@@ -93,15 +94,39 @@ app.use(
   })
 );
 
+let transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: "ohanian.florencia@gmail.com",
+    pass: "yqhexatdzbutrqfz", //Contraseña app gmail
+    authMethod: "LOGIN",
+  },
+});
+
+app.get("/mail", async (req, res) => {
+  const resultado = await transporter.sendMail({
+    from: "TEST MAIL ohanian.florencia@gmail.com",
+    to: "florencia.ohanian@gmail.com",
+    subject: "Bienvenidos a Crudo",
+    html: `<div>
+    <h1>Crudo - Tienda de sabores</h1>
+    </div>
+    `,
+  });
+  res.send("Correo enviado");
+});
+
 //Router
-app.use('/', router)
-app.engine("handlebars", engine())
-app.set("view engine", "handlebars")
+app.use("/", router);
+app.engine("handlebars", engine());
+app.set("view engine", "handlebars");
 app.use("/static", express.static(path.join(__dirname, "/public")));
 
-inicializacionPassport()
-app.use(passport.initialize())
-app.use(passport.session())
+inicializacionPassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.get("/setcookie", (req, res) => {
   res
@@ -219,17 +244,17 @@ io.on("connection", (socket) => {
   });
 
   //Se utiliza en logIn
-  // socket.on("credenciales", async (datos) => {
-  //   const user = await userModel.findOne({ email: datos.email });
-  //   // console.log(user);
-  //   if (user) {
-  //     user.password === datos.password
-  //       ? socket.emit('usuarioValido')
-  //       : socket.emit('contraseñaInvalida');
-  //   } else {
-  //     socket.emit('usuarioInexistente');
-  //   }
-  // });
+  socket.on("credenciales", async (datos) => {
+    const user = await userModel.findOne({ email: datos.email });
+    // console.log(user);
+    if (user) {
+      user.password === datos.password
+        ? socket.emit("usuarioValido")
+        : socket.emit("contraseñaInvalida");
+    } else {
+      socket.emit("usuarioInexistente");
+    }
+  });
 });
 
 app.get("/static/chat", (req, res) => {
@@ -246,7 +271,6 @@ app.get("/static/home", async (req, res) => {
     title: "Home",
     js: "home.js",
     login: req.session.login,
-
   });
 });
 
@@ -262,7 +286,7 @@ app.get("/static/login", (req, res) => {
   res.render("session", {
     css: "session.css",
     title: "Session",
-    js: "logIn.js"
+    js: "logIn.js",
   });
 });
 
