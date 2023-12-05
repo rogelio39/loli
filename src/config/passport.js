@@ -60,13 +60,20 @@ const inicializacionPassport = () => {
         try {
           const user = await userModel.findOne({ email: username })
           if (!user) {
+            console.log('validacioname las canicas')
             return done(null, false);
           }
+          // console.log('powersend: ', password)
+          // console.log('USERPW: ', user.password)
           if (validatePassword(password, user.password)) {
+            console.log('is not doing any password validation')
             return done(null, user)
           }
+          console.log('no hizo validaciones')
+
           return done(null, false)
         } catch (error) {
+          console.log('errorcito')
           return done(error)
         }
       }))
