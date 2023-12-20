@@ -15,6 +15,7 @@ loginForm.addEventListener('submit', async (e) => {
         body: JSON.stringify(login)
     })
     .then(response =>{
+        console.log('RESPONSE: ', response)
         if (response.ok)window.location.href = response.url
     })
     .catch(error=>{

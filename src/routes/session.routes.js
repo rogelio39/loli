@@ -58,7 +58,7 @@ res.clearCookie('jwtCookie')
 
 //Verifica si el token es valido
 sessionRouter.get('/testJWT', passport.authenticate('jwt', {session:false}), (req,res)=>{
-  console.log(req)
+  // console.log(req)
   res.send(req.user)
 })
 

@@ -15,6 +15,7 @@ import { productoModel } from "./models/producto.models.js";
 import router from "./routes/index.routes.js";
 import "dotenv/config";
 import nodemailer from "nodemailer";
+import { addLogger } from "./config/logger.js";
 
 const app = express();
 const PORT = 8080;
@@ -93,6 +94,7 @@ app.use(
     saveUninitialized: false,
   })
 );
+app.use(addLogger)
 
 let transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -115,8 +117,37 @@ app.get("/mail", async (req, res) => {
     </div>
     `,
   });
-  res.send("Correo enviado");
+  res.send("Correo enviado");
 });
+
+app.get('/fatal', (req,res) => {
+  req.logger.fatal('<span style= "color:red"> Texto fatal</span><br/>')
+  res.send("Fatal")
+})
+app.get('/error', (req,res) => {
+  req.logger.error('<span style= "color:yellow"> Texto error</span><br/>')
+  res.send("Error")
+})
+app.get('/warn', (req,res) => {
+  req.logger.warn('<span style= "color:cyan"> Texto warn</span><br/>')
+  res.send("Warn")
+})
+app.get('/info', (req,res) => {
+  req.logger.info('<span style= "color:blue"> Texto informativo de Info</span><br/>')
+  res.send("Info")
+})
+app.get('/debug', (req,res) => {
+  req.logger.debug("Debug")
+  res.send("Debug")
+})
+
+//Ruta para ver todos los errores
+app.get('/loggerTest', (req,res)=>{
+  logger.error('Loggers de mi app')
+  res.send("Registro de errores")
+})
+
+
 
 //Router
 app.use("/", router);

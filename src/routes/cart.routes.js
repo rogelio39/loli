@@ -32,19 +32,13 @@ carritoRouter.get('/', async (req, res) => {
         try {
         const cart = await cartModel.find()
         if (cart)
-
-            res.status(200).send({
-                respuesta: 'OK',
-                mensaje: cart
-            })
-
-
-        else
+        res.status(200).send({ respuesta: 'OK',mensaje: cart   })
+            else
             res.status(404).send({
                 respuesta: 'Error en consultar carrito',
                 mensaje: 'Not Found'
             })
-    } catch (error) {
+        } catch (error) {
         res.status(400).send({
             respuesta: 'Error',
             mensaje: "Carrito no encontrado"
@@ -53,13 +47,11 @@ carritoRouter.get('/', async (req, res) => {
 })
 
 carritoRouter.get('/:id', async (req, res) => {
-    const {
-        id
-    } = req.params
+    const {  id } = req.params
     try {
         const cart = await cartModel.findById(id)
         if (cart)
-            res.status(200).send({
+                    res.status(200).send({
                 respuesta: 'OK',
                 mensaje: cart
             })
@@ -130,7 +122,7 @@ carritoRouter.delete('/:cid', async (req, res) => {
         await cartModel.findByIdAndUpdate(cid, { products: [] })
         res.status(200).send({ respuesta: 'ok', mensaje: 'Carrito vacio' })
     } catch (error) {
-        res.status(400).send({ respuesta: 'Error getting cart by id', mensaje: error })
+        res.status(400).send({ respuesta: 'Error al encontrar carrito', mensaje: error })
     }
 })
 
@@ -150,8 +142,25 @@ carritoRouter.delete('/:cid/productos/:pid', async (req, res) => {
         const respuesta = await cartModel.findByIdAndUpdate(cid, cart)
         res.status(200).send({ respuesta: 'OK', mensaje: respuesta })
     } catch (error) {
-        res.status(400).send({ respuesta: 'Error getting cart by id', mensaje: error })
+        res.status(400).send({ respuesta: 'Error al encontrar carrito', mensaje: error })
     }
 })
+
+// carritoRouter.post('/:cid/purchase', async (req, res) => {
+//     let {cid} = req.params;
+//     let purchaser = req.user.user.email
+//     try{
+//         let cart = await cartModel.findById(cid)
+//         if(cart){
+
+//         }
+//         else(error){
+//             res.status(404).send({respuesta: 'Error en consultar parametros', mensaje: error})
+//         }
+//     }catch{
+
+//     }
+// })
+
 
 export default carritoRouter
