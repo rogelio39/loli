@@ -16,6 +16,8 @@ import router from "./routes/index.routes.js";
 import "dotenv/config";
 import nodemailer from "nodemailer";
 import { addLogger } from "./config/logger.js";
+import fs from 'fs'
+
 
 const app = express();
 const PORT = 8080;
@@ -142,12 +144,18 @@ app.get('/debug', (req,res) => {
 })
 
 //Ruta para ver todos los errores
-app.get('/loggerTest', (req,res)=>{
-  logger.error('Loggers de mi app')
-  res.send("Registro de errores")
-})
-
-
+app.get('/loggerTest', (req, res) => {
+  req.logger.error('Loggers de mi app');
+  fs.readFile('logger.html', 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Error al leer el archivo');
+    }
+    res.setHeader('Content-Type', 'text/html');
+    res.send('Registro de errores: ' + data);
+  });
+  // res.send('Registro de errores: ');
+});
 
 //Router
 app.use("/", router);
