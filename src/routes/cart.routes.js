@@ -1,6 +1,8 @@
 import { Router} from "express";
 import {cartModel} from "../models/cart.models.js";
 import {productoModel} from "../models/producto.models.js";
+import { autorizacion } from "../util/messagesError.js";
+import {ticketModel}    from "../models/ticket.model.js"
 
 
 const carritoRouter = Router()
@@ -62,7 +64,7 @@ carritoRouter.get('/:id', async (req, res) => {
     }
 })
 
-carritoRouter.post('/:cid/productos/:pid', async (req, res) => {
+carritoRouter.post('/:cid/productos/:pid', autorizacion('user'), async (req, res) => {
     const { cid, pid} = req.params
     const {  cantidad } = req.body
     try {
@@ -105,7 +107,7 @@ carritoRouter.post('/:cid/productos/:pid', async (req, res) => {
     }
 })
 
-carritoRouter.delete('/:cid', async (req, res) => {
+carritoRouter.delete('/:cid', autorizacion('user'), async (req, res) => {
     const { cid } = req.params
     try {
         await cartModel.findByIdAndUpdate(cid, { products: [] })
@@ -115,7 +117,7 @@ carritoRouter.delete('/:cid', async (req, res) => {
     }
 })
 
-carritoRouter.delete('/:cid/productos/:pid', async (req, res) => {
+carritoRouter.delete('/:cid/productos/:pid', autorizacion('user'), async (req, res) => {
     const { cid, pid } = req.params
     try {
         const cart = await cartModel.findById(cid)
@@ -137,7 +139,6 @@ carritoRouter.delete('/:cid/productos/:pid', async (req, res) => {
 
 carritoRouter.post('/:cid/purchase', async (req, res) => {
     let {cid} = req.params;
-    let purchaser = req.user.user.email
     try{
         let cart = await cartModel.findById(cid) //Veo si existe carrito
         if(cart){
@@ -154,12 +155,12 @@ carritoRouter.post('/:cid/purchase', async (req, res) => {
                     prooductosAEliminar.push(prod);
                 }
             }
-            if (prooductosAEliminar.length > 0){//Actualizo array sin los prod a elimianr
+            if (prooductosAEliminar.length > 0){//Actualizo array sin los prod a eliminar
                 cart.productos = cart.productos.filter((prod) => !prooductosAEliminar.includes(prod));
                 await cartModel.findByIdAndUpdate(cid, cart)//Actualiza el carrito
             }
             let ticket = await ticketModel.create({
-                total: montoFinal,
+                amount: montoFinal,
                 purchaser: req.user.email
                 })
 if(ticket) {
@@ -170,7 +171,7 @@ if(ticket) {
             res.status(400).send({respuesta: 'Error al crear ticket', mensaje: error})
         }
     }
-    return res.status(404).send({mensaje: "No se encuentra ticket"})
+return res.status(404).send({mensaje: "No se encuentra"})
     }catch(error){
         res.status(500).send({response: "error", message: error})
     }

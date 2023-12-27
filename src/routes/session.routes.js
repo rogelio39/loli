@@ -62,8 +62,8 @@ sessionRouter.get('/testJWT', passport.authenticate('jwt', {session:false}), (re
   res.send(req.user)
 })
 
-sessionRouter.get('/current', passportError('jwt'), autorizacion('user'), (req, next) =>{
-  res.send(req.user)
+sessionRouter.get('/current', passportError('jwt'), autorizacion('user'), (req, res, next) =>{
+  res.send(req.user.user)
 })
 
 export default sessionRouter
