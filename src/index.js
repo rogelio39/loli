@@ -146,15 +146,14 @@ app.get('/debug', (req,res) => {
 //Ruta para ver todos los errores
 app.get('/loggerTest', (req, res) => {
   req.logger.error('Loggers de mi app');
-  fs.readFile('logger.html', 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
+  fs.readFile('logger.html', 'utf8', (error, data) => {
+    if (error) {
+      console.error(errorr);
       return res.status(500).send('Error al leer el archivo');
     }
     res.setHeader('Content-Type', 'text/html');
     res.send('Registro de errores: ' + data);
   });
-  // res.send('Registro de errores: ');
 });
 
 //Router

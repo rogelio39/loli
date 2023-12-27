@@ -1,5 +1,6 @@
 import {Schema, model} from "mongoose"
 import { v4 as uuidv4 } from 'uuid'
+import crypto from 'crypto'
 
 const ticketSchema = new Schema({
     code: {
@@ -23,7 +24,7 @@ const ticketSchema = new Schema({
 
 ticketSchema.pre("save", function (next) {
     if (!this.code) {
-        this.code = randomUUID()
+        this.code = crypto.randomUUID()
     }
     next()
 })

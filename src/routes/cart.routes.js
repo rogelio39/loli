@@ -1,12 +1,6 @@
-import {
-    Router
-} from "express";
-import {
-    cartModel
-} from "../models/cart.models.js";
-import {
-    productoModel
-} from "../models/producto.models.js";
+import { Router} from "express";
+import {cartModel} from "../models/cart.models.js";
+import {productoModel} from "../models/producto.models.js";
 
 
 const carritoRouter = Router()
@@ -69,13 +63,8 @@ carritoRouter.get('/:id', async (req, res) => {
 })
 
 carritoRouter.post('/:cid/productos/:pid', async (req, res) => {
-    const {
-        cid,
-        pid
-    } = req.params
-    const {
-        cantidad
-    } = req.body
+    const { cid, pid} = req.params
+    const {  cantidad } = req.body
     try {
         const cart = await cartModel.findById(cid)
         if (cart) {
@@ -146,21 +135,46 @@ carritoRouter.delete('/:cid/productos/:pid', async (req, res) => {
     }
 })
 
-// carritoRouter.post('/:cid/purchase', async (req, res) => {
-//     let {cid} = req.params;
-//     let purchaser = req.user.user.email
-//     try{
-//         let cart = await cartModel.findById(cid)
-//         if(cart){
-
-//         }
-//         else(error){
-//             res.status(404).send({respuesta: 'Error en consultar parametros', mensaje: error})
-//         }
-//     }catch{
-
-//     }
-// })
+carritoRouter.post('/:cid/purchase', async (req, res) => {
+    let {cid} = req.params;
+    let purchaser = req.user.user.email
+    try{
+        let cart = await cartModel.findById(cid) //Veo si existe carrito
+        if(cart){
+            let montoFinal = 0;
+            let prooductosAEliminar = [];
+            for(const prod of cart.productos){
+                let idPro = prod.id_prod;
+                let productBD = await productoModel.findById(idPro) // Traigo el producto de la BD
+                if(prod.cantidad <= productBD.stock) { //Comparo stock del carrito con el de la BD
+                    montoFinal += prod.cantidad * productBD.precio
+                    productBD.stock -= prod.cantidad;
+                    await productoModel.findByIdAndUpdate(idPro, productBD)
+                } else {
+                    prooductosAEliminar.push(prod);
+                }
+            }
+            if (prooductosAEliminar.length > 0){//Actualizo array sin los prod a elimianr
+                cart.productos = cart.productos.filter((prod) => !prooductosAEliminar.includes(prod));
+                await cartModel.findByIdAndUpdate(cid, cart)//Actualiza el carrito
+            }
+            let ticket = await ticketModel.create({
+                total: montoFinal,
+                purchaser: req.user.email
+                })
+if(ticket) {
+    cart.productos = [];
+    await cartModel.findByIdAndUpdate(cid, cart) //Vacia carrito
+    return res.status(200).send({ticket: ticket})
+} else{
+            res.status(400).send({respuesta: 'Error al crear ticket', mensaje: error})
+        }
+    }
+    return res.status(404).send({mensaje: "No se encuentra ticket"})
+    }catch(error){
+        res.status(500).send({response: "error", message: error})
+    }
+    });
 
 
 export default carritoRouter
