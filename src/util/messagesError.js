@@ -18,14 +18,11 @@ return async (req, res, next) => {
 
 //Recibo un rol y establezco la capacidad de ese usuario, lo hago dinamico
 export const autorizacion = (rol) => {   
-
     return async (req, res, next) =>{
-        console.log(req.session)
-        if(!req.user) {
-        
-    return res.status(401).send({error: 'Usuario no autorizado'})//veo si el token esta activo
+        if(!req.user.user) {
+        return res.status(401).send({error: 'Usuario no autorizado'})//veo si el token esta activo
 }
-        if(req.user.rol != rol){
+        if(req.user.user.rol != rol){
             return res.status(403).send({error: 'Usuario sin permisos necesarios'})
         }
     next()

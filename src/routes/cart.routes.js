@@ -64,7 +64,7 @@ carritoRouter.get('/:id', async (req, res) => {
     }
 })
 
-carritoRouter.post('/:cid/productos/:pid', autorizacion('user'), async (req, res) => {
+carritoRouter.post('/:cid/productos/:pid',passportError('jwt'), autorizacion('user'), async (req, res) => {
     const { cid, pid} = req.params
     const {  cantidad } = req.body
     try {
