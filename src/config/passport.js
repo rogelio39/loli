@@ -14,7 +14,7 @@ const ExtractJWT = jwt.ExtractJwt //Extrae las cookies
 const inicializacionPassport = () => {
   const cookieExtractor = (req) => {
     const token = req.cookies.jwtCookie ? req.cookies.jwtCookie : {}
-        console.log('cookieExtractor', token)
+        // console.log('cookieExtractor', token)
     return token
   }
 
@@ -23,7 +23,7 @@ const inicializacionPassport = () => {
         secretOrKey: process.env.JWT_SECRET
       }, async (jwt_payload, done) => {
         try {
-          console.log('JWT', jwt_payload)
+          // console.log('JWT', jwt_payload)
           return done(null, jwt_payload)
         } catch (error) {
           return done(error)
@@ -60,18 +60,16 @@ const inicializacionPassport = () => {
         try {
           const user = await userModel.findOne({ email: username })
           if (!user) {
-            console.log('validacioname las canicas')
             return done(null, false);
           }
           if (validatePassword(password, user.password)) {
             console.log('password validation correct')
             return done(null, user)
           }
-          console.log('no hizo validaciones')
+          // console.log('no hizo validaciones')
 
           return done(null, false)
         } catch (error) {
-          console.log('errorcito')
           return done(error)
         }
       }))

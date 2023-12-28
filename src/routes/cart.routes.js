@@ -139,31 +139,47 @@ carritoRouter.delete('/:cid/productos/:pid', autorizacion('user'), async (req, r
 
 carritoRouter.post('/:cid/purchase', async (req, res) => {
     let {cid} = req.params;
+    console.log("hola",req.session)
     try{
         let cart = await cartModel.findById(cid) //Veo si existe carrito
         if(cart){
             let montoFinal = 0;
             let prooductosAEliminar = [];
+
             for(const prod of cart.productos){
+                // console.log("lolitacapa",prod)
+
                 let idPro = prod.id_prod;
                 let productBD = await productoModel.findById(idPro) // Traigo el producto de la BD
+                // console.log("Facutodomundo",productBD)
                 if(prod.cantidad <= productBD.stock) { //Comparo stock del carrito con el de la BD
                     montoFinal += prod.cantidad * productBD.precio
                     productBD.stock -= prod.cantidad;
                     await productoModel.findByIdAndUpdate(idPro, productBD)
+
                 } else {
                     prooductosAEliminar.push(prod);
                 }
             }
+
             if (prooductosAEliminar.length > 0){//Actualizo array sin los prod a eliminar
                 cart.productos = cart.productos.filter((prod) => !prooductosAEliminar.includes(prod));
                 await cartModel.findByIdAndUpdate(cid, cart)//Actualiza el carrito
             }
-            let ticket = await ticketModel.create({
-                amount: montoFinal,
-                purchaser: req.user.email
-                })
+            if(req.user.rol === 'premium'){
+                const descuento =  montoFinal * 0.15
+                montoFinal = montoFinal - descuento
+            }
+
+        const ticket = await ticketModel.create({
+        amount: montoFinal,
+
+        purchaser: req.user.email})
+
+console.log("pipi trlo:", ticket)
 if(ticket) {
+
+    console.log("pipuuuu:")
     cart.productos = [];
     await cartModel.findByIdAndUpdate(cid, cart) //Vacia carrito
     return res.status(200).send({ticket: ticket})
