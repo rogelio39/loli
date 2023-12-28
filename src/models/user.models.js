@@ -27,7 +27,7 @@ const userSchema = new Schema({
     }, 
     rol: {
         type: String,
-        default: 'user'
+        default: ['user', 'premium']
     },
     cart : {
     type: Schema.Types.ObjectId,
@@ -44,4 +44,6 @@ userSchema.pre('save', async function(next){
         next(error)
     }
 })
+
+
 export const userModel = model('users', userSchema)

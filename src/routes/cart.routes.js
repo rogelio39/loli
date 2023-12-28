@@ -1,7 +1,7 @@
 import { Router} from "express";
 import {cartModel} from "../models/cart.models.js";
 import {productoModel} from "../models/producto.models.js";
-import { autorizacion } from "../util/messagesError.js";
+import { passportError, autorizacion } from "../util/messagesError.js";
 import {ticketModel}    from "../models/ticket.model.js"
 
 

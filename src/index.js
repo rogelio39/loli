@@ -98,29 +98,7 @@ app.use(
 );
 app.use(addLogger)
 
-let transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: "ohanian.florencia@gmail.com",
-    pass: "yqhexatdzbutrqfz", //Contraseña app gmail
-    authMethod: "LOGIN",
-  },
-});
 
-app.get("/mail", async (req, res) => {
-  const resultado = await transporter.sendMail({
-    from: "TEST MAIL ohanian.florencia@gmail.com",
-    to: "florencia.ohanian@gmail.com",
-    subject: "Bienvenidos a Crudo",
-    html: `<div>
-    <h1>Crudo - Tienda de sabores</h1>
-    </div>
-    `,
-  });
-  res.send("Correo enviado");
-});
 
 app.get('/fatal', (req,res) => {
   req.logger.fatal('<span style= "color:red"> Texto fatal</span><br/>')
