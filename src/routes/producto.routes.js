@@ -28,7 +28,7 @@ productosRouter.get('/:id', async (req, res) => {
     }
 })
 
-productosRouter.post('/', passportError('jwt'), autorizacion('admin'), async (req, res) => {
+productosRouter.post('/', autorizacion('admin'), async (req, res) => {
     const{codigo, nombre, descripcion, cantidad, precio, stock, categoria, status, img} = req.body
     try {
         const prod = await productoModel.create({codigo, nombre, descripcion, cantidad, precio, stock, categoria, status, img})
@@ -39,7 +39,7 @@ productosRouter.post('/', passportError('jwt'), autorizacion('admin'), async (re
     }
 })
 
-productosRouter.put('/:id', passportError('jwt'), autorizacion('admin'), async (req, res) => {
+productosRouter.put('/:id', autorizacion('admin'), async (req, res) => {
         const {id} = req.params
         const {codigo, nombre, descripcion, cantidad, precio, stock, categoria, status, img} = req.body
         try {
@@ -53,7 +53,7 @@ productosRouter.put('/:id', passportError('jwt'), autorizacion('admin'), async (
 }
 })
 
-productosRouter.delete('/:id',passportError('jwt'), autorizacion('admin'), async (req, res) => {
+productosRouter.delete('/:id', autorizacion('admin'), async (req, res) => {
             const {id} = req.params
             
             try {

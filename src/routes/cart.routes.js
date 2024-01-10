@@ -139,6 +139,7 @@ carritoRouter.delete('/:cid/productos/:pid', autorizacion('basico'), async (req,
 
 carritoRouter.post('/:cid/purchase', async (req, res) => {
     let {cid} = req.params;
+    console.log("session", req.session)
     try{
         let cart = await cartModel.findById(cid) //Veo si existe carrito
         if(cart){
@@ -166,9 +167,11 @@ carritoRouter.post('/:cid/purchase', async (req, res) => {
                 const descuento =  montoFinal * 0.15
                 montoFinal = montoFinal - descuento
             }
+
         const ticket = await ticketModel.create({
         amount: montoFinal,
         purchaser: req.session.user.email})
+        console.log('Ticket creado correctamente', ticket);
 
 if(ticket) {
     cart.productos = [];
