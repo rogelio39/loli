@@ -64,7 +64,7 @@ carritoRouter.get('/:id', async (req, res) => {
     }
 })
 
-carritoRouter.post('/:cid/productos/:pid',passportError('jwt'), autorizacion('user'), async (req, res) => {
+carritoRouter.post('/:cid/productos/:pid',passportError('jwt'), autorizacion('basico'), async (req, res) => {
     const { cid, pid} = req.params
     const {  cantidad } = req.body
     try {
@@ -117,7 +117,7 @@ carritoRouter.delete('/:cid', autorizacion('user'), async (req, res) => {
     }
 })
 
-carritoRouter.delete('/:cid/productos/:pid', autorizacion('user'), async (req, res) => {
+carritoRouter.delete('/:cid/productos/:pid', autorizacion('basico'), async (req, res) => {
     const { cid, pid } = req.params
     try {
         const cart = await cartModel.findById(cid)
@@ -139,7 +139,6 @@ carritoRouter.delete('/:cid/productos/:pid', autorizacion('user'), async (req, r
 
 carritoRouter.post('/:cid/purchase', async (req, res) => {
     let {cid} = req.params;
-    console.log("hola",req.session)
     try{
         let cart = await cartModel.findById(cid) //Veo si existe carrito
         if(cart){
@@ -147,11 +146,8 @@ carritoRouter.post('/:cid/purchase', async (req, res) => {
             let prooductosAEliminar = [];
 
             for(const prod of cart.productos){
-                // console.log("lolitacapa",prod)
-
                 let idPro = prod.id_prod;
                 let productBD = await productoModel.findById(idPro) // Traigo el producto de la BD
-                // console.log("Facutodomundo",productBD)
                 if(prod.cantidad <= productBD.stock) { //Comparo stock del carrito con el de la BD
                     montoFinal += prod.cantidad * productBD.precio
                     productBD.stock -= prod.cantidad;
@@ -166,25 +162,20 @@ carritoRouter.post('/:cid/purchase', async (req, res) => {
                 cart.productos = cart.productos.filter((prod) => !prooductosAEliminar.includes(prod));
                 await cartModel.findByIdAndUpdate(cid, cart)//Actualiza el carrito
             }
-            if(req.user.rol === 'premium'){
+            if(req.session.user.rol === 'premium'){
                 const descuento =  montoFinal * 0.15
                 montoFinal = montoFinal - descuento
             }
-
         const ticket = await ticketModel.create({
         amount: montoFinal,
+        purchaser: req.session.user.email})
 
-        purchaser: req.user.email})
-
-console.log("pipi trlo:", ticket)
 if(ticket) {
-
-    console.log("pipuuuu:")
     cart.productos = [];
     await cartModel.findByIdAndUpdate(cid, cart) //Vacia carrito
     return res.status(200).send({ticket: ticket})
 } else{
-            res.status(400).send({respuesta: 'Error al crear ticket', mensaje: error})
+        res.status(400).send({respuesta: 'Error al crear ticket', mensaje: error})
         }
     }
 return res.status(404).send({mensaje: "No se encuentra"})
@@ -192,6 +183,5 @@ return res.status(404).send({mensaje: "No se encuentra"})
         res.status(500).send({response: "error", message: error})
     }
     });
-
 
 export default carritoRouter

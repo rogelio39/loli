@@ -33,7 +33,7 @@ const inicializacionPassport = () => {
   passport.use("registro",  new LocalStrategy(
       { passReqToCallback: true, usernameField: "email" },
       async (req, username, password, done) => {
-        const { nombre, apellido, email, edad } = req.body
+        const { nombre, apellido, email, edad, rol } = req.body
         try {
           const user = await userModel.findOne({ email: email });
           if (user) {
@@ -47,6 +47,7 @@ const inicializacionPassport = () => {
             edad: edad,
             email: email,
             password: passwordHash,
+            rol: rol,
           })
           return done(null, nuevoUsuario)
         } catch (error) {

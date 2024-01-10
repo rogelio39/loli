@@ -16,6 +16,7 @@ try{
     apellido: req.user.apellido,
     edad: req.user.edad,
     email: req.user.email,
+    rol: req.user.rol,
   }
   const token = generarToken(req.user)
   res.cookie('jwtCookie', token, {
@@ -62,7 +63,7 @@ sessionRouter.get('/testJWT', passport.authenticate('jwt', {session:false}), (re
   res.send(req.user)
 })
 
-sessionRouter.get('/current', passportError('jwt'), autorizacion('user'), (req, res, next) =>{
+sessionRouter.get('/current', passportError('jwt'), autorizacion('basico'), (req, res, next) =>{
   res.send(req.user.user)
 })
 

@@ -27,7 +27,7 @@ const userSchema = new Schema({
     }, 
     rol: {
         type: String,
-        default: 'user',
+        default: 'basico',
         enum: ['basico', 'premium']
     },
     cart : {
