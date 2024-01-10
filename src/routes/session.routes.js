@@ -54,12 +54,10 @@ sessionRouter.get("/logout", (req, res) => {
   }
 res.clearCookie('jwtCookie')
   res.status(200).send({resultado: "Sesion cerrada" });
-  // res.redirect('/static/login', 200, { resultado: 'Usuario deslogueado' })
 });
 
 //Verifica si el token es valido
 sessionRouter.get('/testJWT', passport.authenticate('jwt', {session:false}), (req,res)=>{
-  // console.log(req)
   res.send(req.user)
 })
 

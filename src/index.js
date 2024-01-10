@@ -17,10 +17,28 @@ import "dotenv/config";
 import nodemailer from "nodemailer";
 import { addLogger } from "./config/logger.js";
 import fs from 'fs'
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
 
 
 const app = express();
 const PORT = 8080;
+
+//Swagger - Documentación
+const swaggerOptions = {
+  definition : {
+      openapi: '3.1.0',
+      info: {
+          title: "Documentación del curso Backend-CorderHouse",
+          description: "Api Backend CoderHouse "
+      },
+  },
+  apis: [`${__dirname}/docs/**/*.yaml`] // ** indica subcarpeta, no importa el nombre pero si la extension yaml.
+}
+
+
+const spects = swaggerJSDoc(swaggerOptions)
+app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(spects))
 
 mongoose
   .connect(process.env.MONGO_URL)

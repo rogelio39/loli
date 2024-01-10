@@ -1,0 +1,20 @@
+paths:
+  api/cart/:
+    get:
+      summary: Obtener un carrito por ID
+      tags:
+        - Cart
+      # parameters:
+      #     name: _id
+      #     in: path
+      #     required: true
+      #     schema:
+      #       type: string
+      #       description: ID del carrito a buscar
+      responses:
+        "200":
+          description: Carrito obtenido correctamente
+          content:
+            application/json:
+              schema:
+                type: array # Especifica la estructura del objeto de carrito esperado
