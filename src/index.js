@@ -37,6 +37,7 @@ const swaggerOptions = {
 }
 
 
+
 const spects = swaggerJSDoc(swaggerOptions)
 app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(spects))
 

@@ -1,0 +1,192 @@
+paths:
+  /api/productos/:
+    get:
+      summary: Obtener todos los productos
+      tags:
+        - Productos
+      responses:
+        '200':
+          description: Productos obtenidos correctamente
+          content:
+            application/json:
+              schema: 
+                type: array
+        '500':
+          description: Error interno del servidor
+    post:
+      summary: Crear un nuevo producto
+      tags:
+        - Productos
+      requestBody: # Se utiliza requestBody, no parametros
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                codigo:
+                  type: string
+                  description: Codigo del producto
+                nombre:
+                  type: string
+                  description: Nombre del producto
+                descripcion:
+                  type: string
+                  description: Descripción del producto
+                cantidad:
+                  type: number
+                  description: Cantidad del producto
+                precio:
+                  type: number
+                  description: Precio del producto
+                stock:
+                  type: number
+                  description: Cantidad de productos en stock
+                categoria:
+                  type: string
+                  description: Categoría 
+                status:
+                  type: boolean
+                  description: Estado del producto
+                img:
+                  type: array
+                  description: Imagen del producto
+      responses:
+        '201':
+          description: Producto creado correctamente
+          content:
+            application/json:
+              schema:
+                type: object  # Aquí puedes definir el esquema del producto específico
+        '500':
+          description: Error interno del servidor
+          
+  /api/productos/{id}:
+    get:
+      summary: Obtener un producto mediante id
+      tags:
+        - Productos 
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: String
+            description: Id del producto a buscar
+      responses:
+        '200':
+          description: Producto obtenido correctamente
+          content:
+            application/json:
+              schema: 
+                type: object
+        '500':
+          description: Error interno del servidor
+    put:
+      summary: Actualizar un producto
+      tags:
+        - Productos 
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            description: Id del producto a buscar
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                codigo:
+                  type: string
+                  description: Nuevo codigo del producto
+                nombre:
+                  type: string
+                  description: Nuevo nombre del producto
+                descripcion:
+                  type: string
+                  description: Nueva descripción del producto
+                cantidad:
+                  type: number
+                  description: Nueva cantidad del producto
+                precio:
+                  type: number
+                  description: Nuevo precio del producto
+                stock:
+                  type: number
+                  description: Nuevo stock
+                categoria:
+                  type: string
+                  description: Nueva categoría 
+                status:
+                  type: boolean
+                  description: Nuevo estado del producto
+                img:
+                  type: array
+                  description: Nueva imagen del producto
+      responses:
+        '200':
+          description: Producto actualizado correctamente
+          content:
+            application/json:
+              schema: 
+                type: object  # Define el esquema del producto específico después de la actualización
+    delete:
+      summary: Eliminar producto
+      tags:
+        - Productos 
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string 
+            description: Id del producto a buscar
+      responses:
+        '200':
+          description: Producto eliminado correctamente
+          content:
+            application/json:
+              schema: 
+                type: object  # Define el esquema del producto específico después de la eliminación
+
+
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID autogenerado por MongoDB
+        codigo:
+          type: string
+          description: Codigo del producto
+        nombre:
+          type: string
+          description: Nombre del producto
+        descripcion:
+          type: string
+          description: Descripción del producto
+        cantidad:
+          type: number
+          description: Cantidad del producto
+        precio:
+          type: number
+          description: Precio del producto
+        stock:
+          type: number
+          description: Cantidad de productos en stock
+        categoria:
+          type: string
+          description: Categoría 
+        status:
+          type: boolean
+          description: Estado del producto
+        img:
+          type: array
+          description: Imagen del producto

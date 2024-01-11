@@ -1,20 +1,149 @@
 paths:
   api/cart/:
+    post:
+      summary: Crear un nuevo carrito
+      tags:
+        - Cart
+      responses:
+        '201':
+          description: Carrito creado correctamente
+          content:
+            application/json:
+              schema: 
+                type: object  # Especifica la estructura del objeto de carrito creado
+        '500':
+          description: Error interno del servidor
+  api/cart/:id:
     get:
       summary: Obtener un carrito por ID
       tags:
         - Cart
-      # parameters:
-      #     name: _id
-      #     in: path
-      #     required: true
-      #     schema:
-      #       type: string
-      #       description: ID del carrito a buscar
+      parameters:
+          name: _id
+          in: path
+          required: true
+          schema:
+            type: string
+            description: ID del carrito a buscar
       responses:
         "200":
           description: Carrito obtenido correctamente
           content:
             application/json:
               schema:
-                type: array # Especifica la estructura del objeto de carrito esperado
+                type: objet # Especifica la estructura del objeto de carrito esperado
+        '500':
+          description: Error interno del servidor
+  api/cart/:cid/productOs/:pid:
+    post:
+      summary: Agregar producto a un carrito
+      tags:
+        - Cart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+            description: ID del carrito
+        - name: pid
+          in: path
+          required: true
+          schema:
+            type: string
+            description: ID del producto a agregar
+      responses:
+        '200':
+          description: Producto agregado correctamente al carrito
+          content:
+            application/json:
+              schema: 
+                type: object  # Especifica la estructura del objeto de carrito después de la actualización
+        '500':
+          description: Error interno del servidor
+
+  api/cart/:cid:
+    deleteCid:
+      summary: Eliminar carrito
+      tags:
+        - Cart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+            description: ID del carrito a eliminar
+      responses:
+        '200':
+          description: Carrito eliminado correctamente
+          content:
+            application/json:
+              schema: 
+                type: object  # Especifica la estructura del objeto de carrito después de la eliminación
+        '500':
+          description: Error interno del servidor
+    
+    delete:
+      summary: Eliminar producto de un carrito
+      tags:
+        - Cart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+            description: ID del carrito
+        - name: pid
+          in: path
+          required: true
+          schema:
+            type: string
+            description: ID del producto a eliminar del carrito
+      responses:
+        '200':
+          description: Producto eliminado correctamente del carrito
+          content:
+            application/json:
+              schema: 
+                type: object  # Especifica la estructura del objeto de carrito después de la eliminación
+        '500':
+          description: Error interno del servidor
+    get:
+      summary: Realizar compra de un carrito
+      tags:
+        - Cart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+            description: ID del carrito a comprar
+      responses:
+        '200':
+          description: Compra realizada correctamente
+          content:
+            application/json:
+              schema: 
+                type: object  # Especifica la estructura del objeto de carrito después de la compra
+        '500':
+          description: Error interno del servidor
+
+components:
+    schemas:
+        Cart:
+          type: object
+          properties:
+            products:
+              type: array
+              items:
+                type: object
+                properties:
+                  id_prod:
+                    type: string
+                    description: ID del producto en el carrito
+                  quantity:
+                    type: number
+                    description: Cantidad del producto en el carrito
