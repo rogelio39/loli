@@ -14,7 +14,6 @@ import { userModel } from "./models/user.models.js";
 import { productoModel } from "./models/producto.models.js";
 import router from "./routes/index.routes.js";
 import "dotenv/config";
-import nodemailer from "nodemailer";
 import { addLogger } from "./config/logger.js";
 import fs from 'fs'
 import swaggerJSDoc from "swagger-jsdoc";
@@ -37,88 +36,40 @@ const swaggerOptions = {
 }
 
 
-
+//Documentacion con Swagger
 const spects = swaggerJSDoc(swaggerOptions)
 app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(spects))
 
-mongoose
-  .connect(process.env.MONGO_URL)
-  .then(async () => {
+//Conexion a la base de datos
+mongoose.connect(process.env.MONGO_URL).then(async () => {
     console.log("BDD conectada");
-    // await productoModel.create(
-    //     [
-    //     {
-    //         codigo: "123pizza",
-    //         nombre: "Pizza de queso azul",
-    //         descripcion: "Masa de pizza con salsa roja, muzzarella y queso azul",
-    //         cantidad: 1,
-    //         precio: 2500,
-    //         stock: 1,
-    //         categoria: "Pizzas y empanadas",
-    //         status: true,
-    //         img: [],
-    //     },
-    //     {
-    //         codigo: "124pizza",
-    //         nombre: "Pizza muzzarella",
-    //         descripcion: "Masa de pizza con salsa roja, muzzarella y queso azul",
-    //         cantidad: 1,
-    //         precio: 2000,
-    //         stock: 1,
-    //         categoria: "Pizzas y empanadas",
-    //         status: true,
-    //         img: [],
-    //     },
-    //     {
-    //         codigo: "125pizza",
-    //         nombre: "Pizza cebolla y muzzarella",
-    //         descripcion: "Masa de pizza con salsa roja, muzzarella y queso azul",
-    //         cantidad: 1,
-    //         precio: 2500,
-    //         stock: 1,
-    //         categoria: "Pizzas y empanadas",
-    //         status: true,
-    //         img: [],
-    //     },
-    //     {
-    //         codigo: "126pizza",
-    //         nombre: "Pizza de jamon y muzzarella",
-    //         descripcion: "Masa de pizza con salsa roja, muzzarella y queso azul",
-    //         marca: "Crudo",
-    //         cantidad: 1,
-    //         precio: 2500,
-    //         stock: 1,
-    //         categoria: "Pizzas y empanadas",
-    //         status: true,
-    //         img: [],
-    //     }
-    // ])
-    // const resultado = await userModel.paginate();
-  })
+      })
   .catch(() => console.log("Error de conexion a la BDD"));
 
-//middlewares
+//Middlewares
 app.use(express.json());
 app.use(cookieParser(process.env.SIGNED_COOKIE));
+
+//Conexion base de datos
 app.use(
   session({
     store: MongoStore.create({
       mongoUrl: process.env.MONGO_URL,
       mongoOptions: {
-        useNewUrlParser: true,
+        useNewUrlParser: true, //Establezco que la conexion es mediante URL
         useUnifiedTopology: true,
       },
       ttl: 60,
     }),
     secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
+    resave: false, //Se guarda pese a no tener modificaciones
+    saveUninitialized: false, //Guarda la sesion pese a no tener datos
   })
 );
+
+
+//Ruotes de Logger
 app.use(addLogger)
-
-
-
 app.get('/fatal', (req,res) => {
   req.logger.fatal('<span style= "color:red"> Texto fatal</span><br/>')
   res.send("Fatal")
@@ -159,6 +110,7 @@ app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.use("/static", express.static(path.join(__dirname, "/public")));
 
+//Middlewear passport
 inicializacionPassport();
 app.use(passport.initialize());
 app.use(passport.session());
