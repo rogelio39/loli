@@ -29,8 +29,8 @@ it("Crear producto mediante POST", async () => {
     const producto = await productoModel.create(nuevoProducto);
     expect(producto).to.have.property("_id"); //Verdadero es OK
 })
-it('Actualizar un usuario mediante metodo PUT', async () => {
-    const nuevoProducto = {
+it('Actualizar un producto mediante metodo PUT', async () => {
+    const updateProducto = {
         codigo: "Empa568",
         nombre: "Empanadas de carne cortada a cuchillo",
         descripcion: "Al horno, matambre, cebolla y pimiento",
@@ -40,13 +40,13 @@ it('Actualizar un usuario mediante metodo PUT', async () => {
         categoria: "Empanadas y pizzas",
         status: "true",
         };
-    const user = await productoModel.findByIdAndUpdate("65a931f387fae81dbefcdc6e", udpateUser)
+    const user = await productoModel.findByIdAndUpdate("65a931f387fae81dbefcdc6e", updateProducto)
 
     expect(user).to.have.property('_id')
 })
 it("ELiminar producto mediante DELETE", async () => {
-    const resultado = await productoModel.findByIdAndDelete    ('65a9324c7c963a9fa4506285')
-    expect(resultado).to.be.ok
+    const resultado = await productoModel.findByIdAndDelete('65a9324c7c963a9fa4506285')
+    expect(resultado).to.be.null
     }
 )}
 )
