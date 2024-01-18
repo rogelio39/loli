@@ -33,7 +33,7 @@ it('Actualizar un usuario mediante metodo PUT', async () => {
         "edad": 28,
         "email": "facundo.nadaf@gmail.com",
     } 
-    const user = await userModel.findByIdAndUpdate("655e0cd43a91256d8f59ed34", udpateUser)
+    const user = await userModel.findByIdAndUpdate("655e0cd43a91256d8f59ed34", updateUser)
     expect(user).to.have.property('_id')
 })
 it("ELiminar user mediante DELETE", async () => {

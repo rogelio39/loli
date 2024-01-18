@@ -8,7 +8,8 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "test": "mocha test/productos.test.js",
-    "testChai": "mocha test/productosChai.test.js",
+    "testProductosChai": "mocha test/productosChai.test.js",
+    "testUserChai": "mocha test/userChai.test.js",
     "supertest": "mocha test/supertest.test.js"
   },
   "keywords": [],
