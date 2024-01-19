@@ -10,7 +10,7 @@
     "test": "mocha test/productos.test.js",
     "testProductosChai": "mocha test/productosChai.test.js",
     "testUserChai": "mocha test/userChai.test.js",
-    "supertest": "mocha test/supertest.test.js"
+    "supertest": "mocha test/cart.supertest.test.js"
   },
   "keywords": [],
   "author": "",
