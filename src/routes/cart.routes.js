@@ -64,13 +64,16 @@ carritoRouter.get('/:id', async (req, res) => {
     }
 })
 
-carritoRouter.post('/:cid/productos/:pid',passportError('jwt'), autorizacion('basico'), async (req, res) => {
+carritoRouter.post('/:cid/productos/:pid',  passportError('jwt'), autorizacion('basico'), async (req, res) => {
     const { cid, pid} = req.params
     const {  cantidad } = req.body
+
     try {
         const cart = await cartModel.findById(cid)
+        console.log("cart", cart)
         if (cart) {
             const prod = await productoModel.findById(pid)
+            console.log("prod", prod)
             if (prod) {
                 const indice = cart.productos.findIndex(prod => prod.id_prod == pid)
                 console.log(indice)
